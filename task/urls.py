@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', views.Login, name='login'),
     path('register/', views.registration_view, name='register'),  # Removed the leading slash
     path('dashboard/', views.dashboard_view, name='dashboard'),
-     path('edit/<int:user_id>/', views.edit_user, name='edit_user'),
+    path('edit/<int:user_id>/', views.edit_user, name='edit_user'),
+
     path('delete/<int:user_id>/', views.delete_user, name='delete_user'),
 ]

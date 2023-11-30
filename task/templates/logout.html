@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+
+    <!-- Bootstrap CSS via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-header bg-primary text-white">
+                <h2 class="text-center">Logout</h2>
+            </div>
+            <div class="card-body">
+
+                {% if request.user.is_authenticated %}
+                    <p>You have been successfully logged out.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-block">Login</a>
+                {% else %}
+                    <p>You are not logged in.</p>
+                    
+                {% endif %}
+                <button onclick="redirectToLoginPage('/login')">Go to Login</button>
+
+                <script>
+                  function redirectToLoginPage(url) {
+                    // Use window.location.href to navigate to the specified URL
+                    window.location.href = url;
+                  }
+                </script>
+
+            </div>
+            
+        </div>
+    </div>
+   
+
+    <!-- Bootstrap JS and Popper.js via CDN (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

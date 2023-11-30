@@ -7,7 +7,9 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .forms import RegistrationForm
 from .models import RegisteredUser
-
+from django.contrib.auth import logout
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
@@ -34,20 +36,24 @@ def Login(request):
 
         # Get or create a token for the user
         token, _ = Token.objects.get_or_create(user=user)
-
+     
         # Redirect to the 'register/' page upon successful login
-        return redirect('/register/')
+        return redirect('/dashboard/')
 
     # If it's not a POST request, render the empty login form
     return render(request, 'login.html')
 
-@api_view(["POST"])
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect, HttpResponse
+
 def Logout(request):
     if request.user.is_authenticated:
-        Token.objects.filter(user=request.user).delete()
-    return Response('You have successfully logged out.', status=HTTP_200_OK)
-
-
+        logout(request)
+        return redirect('login')
+    
+    # If user is not logged in, render the template with the button
+    return render(request, 'logout.html', {'show_button': True})
 
 @permission_classes((AllowAny,))
 def registration_view(request):
@@ -69,16 +75,16 @@ def registration_view(request):
 
 @permission_classes((AllowAny,))
 def dashboard_view(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
+    
     
     registered_users = RegisteredUser.objects.all()
     return render(request, 'dashboard.html', {'registered_users': registered_users})
-
 @permission_classes((AllowAny,))
 def edit_user(request, user_id):
+    print(f"Received user_id: {user_id}")  # Add this line for debugging
     user = get_object_or_404(RegisteredUser, id=user_id)
-    
+    print(f"User ID: {user.id}")  # Add this line for debugging
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST, instance=user)
         if form.is_valid():
@@ -88,6 +94,8 @@ def edit_user(request, user_id):
         form = RegistrationForm(instance=user)
 
     return render(request, 'edit.html', {'form': form})
+
+
 
 @permission_classes((AllowAny,))
 def delete_user(request, user_id):
